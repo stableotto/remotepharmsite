@@ -1,7 +1,5 @@
 ---
 // src/components/JobListItem.astro
-import { createSlug } from '../utils/slugs'; // Import the function
-
 export interface Props {
   title: string;
   // location: string; // Removed as all jobs are remote
@@ -12,14 +10,7 @@ export interface Props {
 }
 
 const { title, salary, datePosted, companyName, jobId } = Astro.props;
-
-// Helper function to create SEO-friendly slugs
-// function createSlug(text: string) { ... } // Removed this inline function
-
-const jobTitleSlug = createSlug(title);
-const companyNameSlug = createSlug(companyName);
-const slug = `${jobTitleSlug}-${companyNameSlug}-${jobId}`;
-const detailUrl = `/jobs/${slug}`;
+const detailUrl = `/jobs/${jobId}`; // Assuming a routing structure like /jobs/[id]
 ---
 
 <div class="job-list-item">
