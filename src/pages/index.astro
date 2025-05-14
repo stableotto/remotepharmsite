@@ -1,16 +1,87 @@
 ---
+// src/pages/index.astro
+import JobListItem from '../components/JobListItem.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
+const WORKER_URL = 'https://job-board-api.randyh628.workers.dev/';
+let jobs = [];
+let fetchError = null;
+
+try {
+  const response = await fetch(WORKER_URL);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to fetch jobs: ${response.status} ${response.statusText}. ${errorText}`);
+  }
+  jobs = await response.json();
+} catch (error) {
+  console.error('Error fetching job data:', error);
+  fetchError = error.message;
+}
+
+// Ensure jobs is always an array
+if (!Array.isArray(jobs)) {
+    console.warn("Fetched jobs data is not an array. Defaulting to empty array.", jobs);
+    jobs = [];
+    if (!fetchError) {
+        fetchError = "Job data received from the server was not in the expected format.";
+    }
+}
+
+const pageTitle = "Current Job Openings";
 ---
+<BaseLayout pageTitle={pageTitle}>
+  <div class="container">
+    <h1>{pageTitle}</h1>
+    <p>All positions are remote.</p>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+    {fetchError && (
+      <div class="error-message">
+        <p>Could not load job listings at this time. Please try again later.</p>
+        <p><em>Error details: {fetchError}</em></p>
+      </div>
+    )}
+
+    {!fetchError && jobs.length === 0 && (
+      <p>No job openings available at the moment. Please check back soon!</p>
+    )}
+
+    {!fetchError && jobs.length > 0 && (
+      <div class="job-listings">
+        {jobs.map(job => (
+          <JobListItem 
+            jobId={job.id} 
+            title={job.title} 
+            companyName={job.companyName} 
+            salary={job.salary}
+            datePosted={job.datePosted}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+  }
+  .job-listings {
+    display: grid;
+    gap: 1rem;
+  }
+</style>
