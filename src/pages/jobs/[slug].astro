@@ -6,6 +6,8 @@ import { createSlug } from '../../utils/slugs'; // Import the function
 
 export async function getStaticPaths() {
   try {
+    // Temporarily comment out the fetch to use hardcoded data
+    /*
     const response = await fetch('https://job-board-api.randyh628.workers.dev/');
     if (!response.ok) {
       throw new Error(`Failed to fetch jobs: ${response.status} ${response.statusText}`);
@@ -15,17 +17,41 @@ export async function getStaticPaths() {
       console.error("Fetched data is not an array:", jobs);
       return [];
     }
+    */
+
+    // Hardcoded jobs data for debugging
+    const jobs = [
+      {
+        id: '1',
+        title: 'Test Job Alpha',
+        company: 'Debug Corp',
+        salary: '100,000 - 120,000 USD',
+        date_posted: '2023-10-26T10:00:00.000Z',
+        description: 'This is a test job description for debugging purposes.',
+        job_url: 'https://example.com/apply/1'
+      },
+      {
+        id: '2',
+        title: 'Another Test Listing',
+        company: 'Test Inc',
+        salary: '80,000 - 90,000 USD',
+        date_posted: '2023-10-25T12:00:00.000Z',
+        description: 'More details about this other test listing for debugging.',
+        job_url: 'https://example.com/apply/2'
+      }
+    ];
+
     return jobs.map((job) => {
       const jobTitleSlug = createSlug(job.title);
       const companyNameSlug = createSlug(job.company);
       const slug = `${jobTitleSlug}-${companyNameSlug}-${job.id}`;
       return {
-        params: { slug: slug }, // Use the generated slug for the path
-        props: { job }, // Pass the full job object as a prop
+        params: { slug: slug },
+        props: { job },
       };
     });
   } catch (error) {
-    console.error("Error fetching jobs for static paths:", error);
+    console.error("Error in getStaticPaths (with hardcoded data):", error);
     return [];
   }
 }
