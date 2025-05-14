@@ -1,43 +1,19 @@
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { createSlug } from '../../utils/slugs'; // Import the function
-
-// Helper function to create SEO-friendly slugs (consistency with JobListItem.astro)
-// function createSlug(text: string) { ... } // Removed this inline function
+import { createSlug } from '../../utils/slugs';
 
 export async function getStaticPaths() {
   try {
-    // Temporarily comment out the fetch to use hardcoded data
-    /*
-    const response = await fetch('https://job-board-api.randyh628.workers.dev/');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch jobs: ${response.status} ${response.statusText}`);
-    }
-    const jobs = await response.json();
-    if (!Array.isArray(jobs)) {
-      console.error("Fetched data is not an array:", jobs);
-      return [];
-    }
-    */
-
     // Hardcoded jobs data for debugging
     const jobs = [
       {
         id: '1',
         title: 'Test Job Alpha',
         company: 'Debug Corp',
-        salary: '100,000 - 120,000 USD',
-        date_posted: '2023-10-26T10:00:00.000Z',
-        description: 'This is a test job description for debugging purposes.',
-        job_url: 'https://example.com/apply/1'
+        // Add other fields required by createSlug or props if any, minimally
       },
       {
         id: '2',
         title: 'Another Test Listing',
         company: 'Test Inc',
-        salary: '80,000 - 90,000 USD',
-        date_posted: '2023-10-25T12:00:00.000Z',
-        description: 'More details about this other test listing for debugging.',
-        job_url: 'https://example.com/apply/2'
       }
     ];
 
@@ -47,89 +23,33 @@ export async function getStaticPaths() {
       const slug = `${jobTitleSlug}-${companyNameSlug}-${job.id}`;
       return {
         params: { slug: slug },
-        props: { job },
+        props: { job }, // Pass the minimal job object
       };
     });
   } catch (error) {
-    console.error("Error in getStaticPaths (with hardcoded data):", error);
+    console.error("Error in getStaticPaths (with minimal hardcoded data):", error);
     return [];
   }
 }
 
 const { job } = Astro.props;
 
-if (!job) {
-  // This can happen if getStaticPaths returns an empty array or if the job isn't found
-  // Redirect to a 404 page or show an error message
-  // Ensure you have a src/pages/404.astro page or handle this appropriately
-  return Astro.redirect('/404');
-}
-
-const { 
-  title = 'Job Title Missing', 
-  company = 'Company Missing', 
-  salary = 'N/A', 
-  date_posted,  // Keep as is, will be new Date(undefined) if job is missing
-  description = 'No description available.', 
-  job_url = '' 
-} = job || {}; // Use default empty object if job is null/undefined
-
-const datePostedFormatted = date_posted 
-  ? new Date(date_posted).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) 
-  : 'Date Missing';
+// No complex destructuring, no redirect for now
+// No date formatting
 ---
-<BaseLayout pageTitle={title}>
-  <div class="container">
-    <h1>{title}</h1>
-    <p><strong>Company:</strong> {company}</p>
-    <p><strong>Salary:</strong> {salary}</p>
-    <p><strong>Date Posted:</strong> {datePostedFormatted}</p>
-    <p><strong>Description:</strong></p>
-    <p>{description || "No description available."}</p>
-    {job_url && <a href={job_url} class="apply-button" target="_blank" rel="noopener noreferrer">Apply Now</a>}
-    <a href="/" class="back-link">Back to Listings</a>
-  </div>
-</BaseLayout>
-
-<style>
-  .container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  h1 {
-    color: #333;
-    margin-bottom: 1rem;
-  }
-  p {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 0.75rem;
-  }
-  .apply-button, .back-link {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    margin-top: 1rem;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-  }
-  .apply-button {
-    background-color: #007bff;
-    color: white;
-    margin-right: 10px;
-  }
-  .apply-button:hover {
-    background-color: #0056b3;
-  }
-  .back-link {
-    background-color: #6c757d;
-    color: white;
-  }
-  .back-link:hover {
-    background-color: #545b62;
-  }
-</style> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{job?.title || 'Job Page'}</title>
+</head>
+<body>
+  <main>
+    <h1>{job?.title || 'Job Title Not Found'}</h1>
+    <p>This is a drastically simplified job detail page for debugging.</p>
+    <p>Job ID: {job?.id}</p>
+    <a href="/">Back to Listings (if index page works)</a>
+  </main>
+</body>
+</html>
+<!-- All style tags removed --> 
