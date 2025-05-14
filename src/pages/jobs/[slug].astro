@@ -32,10 +32,12 @@ export async function getStaticPaths() {
 
 const { job } = Astro.props;
 
-// Temporarily commented out to debug compiler error
-// if (!job) {
-//   return Astro.redirect('/404');
-// }
+if (!job) {
+  // This can happen if getStaticPaths returns an empty array or if the job isn't found
+  // Redirect to a 404 page or show an error message
+  // Ensure you have a src/pages/404.astro page or handle this appropriately
+  return Astro.redirect('/404');
+}
 
 const { 
   title = 'Job Title Missing', 
@@ -57,7 +59,7 @@ const datePostedFormatted = date_posted
     <p><strong>Salary:</strong> {salary}</p>
     <p><strong>Date Posted:</strong> {datePostedFormatted}</p>
     <p><strong>Description:</strong></p>
-    <p>{description}</p> {/* Removed fallback here as it's in destructuring */}
+    <p>{description || "No description available."}</p>
     {job_url && <a href={job_url} class="apply-button" target="_blank" rel="noopener noreferrer">Apply Now</a>}
     <a href="/" class="back-link">Back to Listings</a>
   </div>
