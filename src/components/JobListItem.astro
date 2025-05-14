@@ -1,0 +1,55 @@
+---
+// src/components/JobListItem.astro
+export interface Props {
+  title: string;
+  // location: string; // Removed as all jobs are remote
+  salary: string; // Or number, consider formatting
+  datePosted: string; // Or Date object, consider formatting
+  companyName: string;
+  jobId: string | number;
+}
+
+const { title, salary, datePosted, companyName, jobId } = Astro.props;
+const detailUrl = `/jobs/${jobId}`; // Assuming a routing structure like /jobs/[id]
+---
+
+<div class="job-list-item">
+  <h3><a href={detailUrl}>{title}</a></h3>
+  <p><strong>Company:</strong> {companyName}</p>
+  <p><strong>Salary:</strong> {salary}</p>
+  <p><strong>Posted:</strong> {datePosted}</p>
+  <a href={detailUrl} class="view-details-link">View Details</a>
+</div>
+
+<style>
+  /* Basic styling for the component */
+  .job-list-item {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+  }
+  .job-list-item h3 {
+    margin-top: 0;
+  }
+  .job-list-item a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  .job-list-item a:hover {
+    text-decoration: underline;
+  }
+  .view-details-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .view-details-link:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+  }
+</style> 
