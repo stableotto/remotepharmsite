@@ -10,7 +10,24 @@ export interface Props {
 }
 
 const { title, salary, datePosted, companyName, jobId } = Astro.props;
-const detailUrl = `/jobs/${jobId}`; // Assuming a routing structure like /jobs/[id]
+
+// Helper function to create SEO-friendly slugs
+function createSlug(text: string) {
+  if (!text) return '';
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')      // Replace spaces with -
+    .replace(/[^\w-]+/g, '') // Remove all non-word chars
+    .replace(/--+/g, '-')    // Replace multiple - with single -
+    .replace(/^-+/, '')       // Trim - from start of text
+    .replace(/-+$/, '');      // Trim - from end of text
+}
+
+const jobTitleSlug = createSlug(title);
+const companyNameSlug = createSlug(companyName);
+const slug = `${jobTitleSlug}-${companyNameSlug}-${jobId}`;
+const detailUrl = `/jobs/${slug}`;
 ---
 
 <div class="job-list-item">
