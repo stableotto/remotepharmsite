@@ -51,18 +51,15 @@ const pageTitle = "Current Job Openings";
 
     {!fetchError && jobs.length > 0 && (
       <div class="job-listings">
-        {jobs.map((job, index) => (
-          <>
-            <JobListItem 
-              jobId={job.id} 
-              title={job.title} 
-              companyName={job.company} 
-              salary={job.min_amount && job.max_amount ? `$${job.min_amount.toLocaleString()} - $${job.max_amount.toLocaleString()}` : ''}
-              datePosted={job.date_posted}
-              jobUrl={job.job_url}
-            />
-            {index < jobs.length - 1 && <div class="job-divider" />}
-          </>
+        {jobs.map(job => (
+          <JobListItem 
+            jobId={job.id} 
+            title={job.title} 
+            companyName={job.company} 
+            salary={job.min_amount && job.max_amount ? `$${job.min_amount} - $${job.max_amount}` : null}
+            datePosted={job.date_posted}
+            jobUrl={job.job_url}
+          />
         ))}
       </div>
     )}
@@ -110,12 +107,7 @@ const pageTitle = "Current Job Openings";
   .job-listings {
     display: flex;
     flex-direction: column;
-  }
-
-  .job-divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, #e2e8f0, transparent);
-    margin: 0.5rem 0;
+    gap: 0;
   }
 
   @media (max-width: 640px) {
