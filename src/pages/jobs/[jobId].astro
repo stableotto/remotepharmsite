@@ -1,3 +1,4 @@
+---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const { jobId } = Astro.params;
@@ -19,6 +20,7 @@ try {
 } catch (error) {
   return Astro.redirect('/');
 }
+---
 
 <BaseLayout title={`${job.title} at ${job.company}`}>
   <div class="job-detail">
