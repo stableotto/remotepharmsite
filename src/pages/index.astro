@@ -14,9 +14,6 @@ try {
     throw new Error(`Failed to fetch jobs: ${response.status} ${response.statusText}. ${errorText}`);
   }
   jobs = await response.json();
-  
-  // Sort jobs by date_posted in descending order (most recent first)
-  jobs.sort((a, b) => new Date(b.date_posted) - new Date(a.date_posted));
 } catch (error) {
   console.error('Error fetching job data:', error);
   fetchError = error.message;
@@ -36,7 +33,7 @@ const pageTitle = "Current Job Openings";
 <BaseLayout pageTitle={pageTitle}>
   <div class="container">
     <h1>{pageTitle}</h1>
-    <p class="subtitle">All positions are remote.</p>
+    <p>All positions are remote.</p>
 
     {fetchError && (
       <div class="error-message">
@@ -46,7 +43,7 @@ const pageTitle = "Current Job Openings";
     )}
 
     {!fetchError && jobs.length === 0 && (
-      <p class="no-jobs">No job openings available at the moment. Please check back soon!</p>
+      <p>No job openings available at the moment. Please check back soon!</p>
     )}
 
     {!fetchError && jobs.length > 0 && (
@@ -55,10 +52,9 @@ const pageTitle = "Current Job Openings";
           <JobListItem 
             jobId={job.id} 
             title={job.title} 
-            companyName={job.company} 
-            salary={job.min_amount && job.max_amount ? `$${job.min_amount} - $${job.max_amount}` : null}
-            datePosted={job.date_posted}
-            jobUrl={job.job_url}
+            companyName={job.companyName} 
+            salary={job.salary}
+            datePosted={job.datePosted}
           />
         ))}
       </div>
@@ -72,51 +68,20 @@ const pageTitle = "Current Job Openings";
     margin: 2rem auto;
     padding: 0 1rem;
   }
-
   h1 {
     text-align: center;
-    color: #1a365d;
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
-
-  .subtitle {
-    text-align: center;
-    color: #4a5568;
-    font-size: 1.1rem;
-    margin-bottom: 3rem;
-  }
-
   .error-message {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    margin-bottom: 2rem;
-    text-align: center;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
   }
-
-  .no-jobs {
-    text-align: center;
-    color: #4a5568;
-    font-size: 1.1rem;
-    padding: 3rem 0;
-  }
-
   .job-listings {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  @media (max-width: 640px) {
-    .container {
-      margin: 1rem auto;
-    }
-
-    h1 {
-      font-size: 2rem;
-    }
+    display: grid;
+    gap: 1rem;
   }
 </style>

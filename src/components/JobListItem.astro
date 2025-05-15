@@ -7,10 +7,9 @@ export interface Props {
   datePosted: string; // Or Date object, consider formatting
   companyName: string;
   jobId: string | number;
-  jobUrl?: string;
 }
 
-const { title, salary, datePosted, companyName, jobId, jobUrl } = Astro.props;
+const { title, salary, datePosted, companyName, jobId } = Astro.props;
 const detailUrl = `/jobs/${jobId}`; // Assuming a routing structure like /jobs/[id]
 
 // Function to format relative time
@@ -40,21 +39,10 @@ function getRelativeTime(dateString: string) {
 ---
 
 <div class="job-list-item">
-  <div class="job-content">
-    <div class="job-main">
-      <h3><a href={detailUrl}>{title}</a></h3>
-      <p class="company">{companyName}</p>
-      {salary && <p class="salary">{salary}</p>}
-      <p class="date">{getRelativeTime(datePosted)}</p>
-    </div>
-    {jobUrl && (
-      <div class="action-area">
-        <a href={jobUrl} class="apply-button" target="_blank" rel="noopener noreferrer">
-          Apply Now
-        </a>
-      </div>
-    )}
-  </div>
+  <h3><a href={detailUrl}>{title}</a></h3>
+  <p class="company">{companyName}</p>
+  <p class="salary">{salary}</p>
+  <p class="date">{getRelativeTime(datePosted)}</p>
 </div>
 
 <style>
@@ -62,95 +50,45 @@ function getRelativeTime(dateString: string) {
   .job-list-item {
     border: 1px solid #eee;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 12px;
-    background: white;
+    margin-bottom: 1rem;
+    border-radius: 8px;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
 
   .job-list-item:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-
-  .job-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .job-main {
-    flex: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .job-list-item h3 {
-    margin: 0 0 0.75rem 0;
-    font-size: 1.35rem;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
   }
 
-  .job-list-item h3 a {
+  .job-list-item a {
     text-decoration: none;
-    color: #1a365d; /* Dark navy */
-    transition: color 0.2s;
-  }
-
-  .job-list-item h3 a:hover {
     color: #2c974b;
   }
 
+  .job-list-item a:hover {
+    text-decoration: underline;
+  }
+
   .company {
-    color: #4a5568;
+    color: #666;
     font-weight: 500;
-    margin: 0.35rem 0;
-    font-size: 1.1rem;
+    margin: 0.25rem 0;
   }
 
   .salary {
     color: #2c974b;
     font-weight: 600;
-    margin: 0.35rem 0;
-    font-size: 1.1rem;
+    margin: 0.25rem 0;
   }
 
   .date {
-    color: #718096;
+    color: #666;
     font-size: 0.9rem;
-    margin: 0.35rem 0 0 0;
-  }
-
-  .apply-button {
-    display: inline-block;
-    background-color: #2c974b;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: background-color 0.2s, transform 0.2s;
-    white-space: nowrap;
-  }
-
-  .apply-button:hover {
-    background-color: #218838;
-    transform: translateY(-1px);
-  }
-
-  @media (max-width: 640px) {
-    .job-content {
-      flex-direction: column;
-    }
-
-    .action-area {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .apply-button {
-      width: 100%;
-      text-align: center;
-    }
+    margin: 0.25rem 0 0 0;
   }
 </style> 
