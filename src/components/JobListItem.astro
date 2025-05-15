@@ -4,12 +4,12 @@ export interface Props {
   title: string;
   // location: string; // Removed as all jobs are remote
   salary: string; // Or number, consider formatting
-  date_posted: string; // Changed from datePosted to match API
-  company: string; // Changed from companyName to match API
+  datePosted: string; // Date string from API
+  company: string;
   jobId: string | number;
 }
 
-const { title, salary, date_posted, company, jobId } = Astro.props;
+const { title, salary, datePosted, company, jobId } = Astro.props;
 const detailUrl = `/jobs/${jobId}`; // Assuming a routing structure like /jobs/[id]
 
 // Function to format relative time
@@ -42,7 +42,7 @@ function getRelativeTime(dateString: string) {
   <h3><a href={detailUrl}>{title}</a></h3>
   <p class="company">{company}</p>
   <p class="salary">{salary}</p>
-  <p class="date">{getRelativeTime(date_posted)}</p>
+  <p class="date">{getRelativeTime(datePosted)}</p>
 </div>
 
 <style>
