@@ -52,9 +52,9 @@ const pageTitle = "Current Job Openings";
           <JobListItem 
             jobId={job.id} 
             title={job.title} 
-            companyName={job.companyName} 
-            salary={job.salary}
-            datePosted={job.datePosted}
+            companyName={job.company} 
+            salary={job.salary || `$${job.min_amount} - $${job.max_amount}`}
+            datePosted={job.date_posted}
           />
         ))}
       </div>
