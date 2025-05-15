@@ -58,10 +58,10 @@ try {
       <div class="job-meta">
         <h2>{job.company}</h2>
         <p class="salary">{salary}</p>
-        <p class="date">{getRelativeTime(job.date_posted)}</p>
+        <p class="date">{getRelativeTime(job.datePosted)}</p>
       </div>
-      {job.job_url && (
-        <a href={job.job_url} class="apply-button" target="_blank" rel="noopener noreferrer">
+      {job.applyLink && (
+        <a href={job.applyLink} class="apply-button" target="_blank" rel="noopener noreferrer">
           Apply Now
         </a>
       )}
