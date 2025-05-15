@@ -3,17 +3,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const { jobId } = Astro.params;
 
 // Fetch job data from our Cloudflare Worker
-const response = await fetch('https://job-board-api.randyh628.workers.dev/');
-const jobs = await response.json();
-const job = jobs.find(j => j.id.toString() === jobId);
-
-// If job not found, redirect to 404 or home
-if (!job) {
+let job;
+let salary;
+try {
+  const response = await fetch('https://job-board-api.randyh628.workers.dev/');
+  const jobs = await response.json();
+  job = jobs.find(j => j.id.toString() === jobId);
+  
+  if (!job) {
+    return Astro.redirect('/');
+  }
+  
+  // Format salary for display
+  salary = job.salary || `$${job.min_amount} - $${job.max_amount}`;
+} catch (error) {
   return Astro.redirect('/');
 }
-
-// Format salary for display
-const salary = job.salary || `$${job.min_amount} - $${job.max_amount}`;
 
 <BaseLayout title={`${job.title} at ${job.company}`}>
   <div class="job-detail">
