@@ -11,45 +11,84 @@ export interface Props {
 
 const { title, salary, datePosted, companyName, jobId } = Astro.props;
 const detailUrl = `/jobs/${jobId}`; // Assuming a routing structure like /jobs/[id]
+
+// Function to format relative time
+function getRelativeTime(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60
+  };
+
+  for (const [unit, seconds] of Object.entries(intervals)) {
+    const interval = Math.floor(diffInSeconds / seconds);
+    if (interval >= 1) {
+      return interval === 1 ? `1 ${unit} ago` : `${interval} ${unit}s ago`;
+    }
+  }
+  
+  return 'just now';
+}
 ---
 
 <div class="job-list-item">
   <h3><a href={detailUrl}>{title}</a></h3>
-  <p><strong>Company:</strong> {companyName}</p>
-  <p><strong>Salary:</strong> {salary}</p>
-  <p><strong>Posted:</strong> {datePosted}</p>
-  <a href={detailUrl} class="view-details-link">View Details</a>
+  <p class="company">{companyName}</p>
+  <p class="salary">{salary}</p>
+  <p class="date">{getRelativeTime(datePosted)}</p>
 </div>
 
 <style>
   /* Basic styling for the component */
   .job-list-item {
-    border: 1px solid #ccc;
-    padding: 1rem;
+    border: 1px solid #eee;
+    padding: 1.5rem;
     margin-bottom: 1rem;
-    border-radius: 4px;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
+
+  .job-list-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
   .job-list-item h3 {
-    margin-top: 0;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
   }
+
   .job-list-item a {
     text-decoration: none;
-    color: #007bff;
+    color: #2c974b;
   }
+
   .job-list-item a:hover {
     text-decoration: underline;
   }
-  .view-details-link {
-    display: inline-block;
-    margin-top: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    text-align: center;
+
+  .company {
+    color: #666;
+    font-weight: 500;
+    margin: 0.25rem 0;
   }
-  .view-details-link:hover {
-    background-color: #0056b3;
-    text-decoration: none;
+
+  .salary {
+    color: #2c974b;
+    font-weight: 600;
+    margin: 0.25rem 0;
+  }
+
+  .date {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0 0;
   }
 </style> 
