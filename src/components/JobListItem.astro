@@ -44,7 +44,7 @@ function getRelativeTime(dateString: string) {
     <div class="job-main">
       <h3><a href={detailUrl}>{title}</a></h3>
       <p class="company">{companyName}</p>
-      {salary && <p class="salary">{salary}</p>}
+      {salary && salary.length > 0 && <p class="salary">{salary}</p>}
       <p class="date">{getRelativeTime(datePosted)}</p>
     </div>
     {jobUrl && (
@@ -62,7 +62,7 @@ function getRelativeTime(dateString: string) {
   .job-list-item {
     border: 1px solid #eee;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
     border-radius: 12px;
     background: white;
     transition: transform 0.2s, box-shadow 0.2s;
