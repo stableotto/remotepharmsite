@@ -7,9 +7,10 @@ export interface Props {
   datePosted: string; // Date string from API
   company: string;
   jobId: string | number;
+  isEven?: boolean;
 }
 
-const { title, salary, datePosted, company, jobId } = Astro.props;
+const { title, salary, datePosted, company, jobId, isEven = false } = Astro.props;
 const detailUrl = `/jobs/${jobId}`; // Assuming a routing structure like /jobs/[id]
 
 // Function to format relative time
@@ -38,7 +39,7 @@ function getRelativeTime(dateString: string) {
 }
 ---
 
-<div class="job-list-item">
+<div class={`job-list-item ${isEven ? 'even' : 'odd'}`}>
   <h3><a href={detailUrl}>{title}</a></h3>
   <p class="company">{company}</p>
   <p class="salary">{salary}</p>
@@ -53,6 +54,16 @@ function getRelativeTime(dateString: string) {
     margin-bottom: 1rem;
     border-radius: 8px;
     transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .job-list-item.even {
+    background-color: #fafafa;
+    border-left: 4px solid #2c974b;
+  }
+
+  .job-list-item.odd {
+    background-color: #ffffff;
+    border-left: 4px solid #34a853;
   }
 
   .job-list-item:hover {
